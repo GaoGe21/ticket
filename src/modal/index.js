@@ -33,6 +33,7 @@ export class Modal extends React.Component {
       cache:'default'
     })
     .then(res => res.json())
+    .catch(err => alert('wow! api err!', err))
     .then((res => {
       this.setState({details: res || []})
     })

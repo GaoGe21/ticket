@@ -30,6 +30,7 @@ export default class App extends React.Component {
       cache:'default'
     })
     .then(res => res.json())
+    .catch(err => alert('wow! api err!', err))
     .then((res => {
       this.setState({list: res || []})
     })
@@ -79,7 +80,7 @@ export default class App extends React.Component {
           return (
             <div className='app-block' title='click to review details' key={index} onClick={() => this.handleClick(d.id)}>
               <Card num={minValue + index + 1}>
-                {d.title}
+                {d.subject}
               </Card>
             </div>
           )
