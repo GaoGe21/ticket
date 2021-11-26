@@ -14,8 +14,26 @@ export default class App extends React.Component {
       minValue: 0,  // 当前页面展示的第一条数据
       maxValue: 25,  // 当前页面展示的最后一条数据
       isShow: false, // 是否展示详细信息界面
-      showId: undefined  // 展示每条数据详细信息
+      showId: undefined,  // 展示每条数据详细信息
+      list: []
     }
+  }
+
+  componentDidMount() {
+    // 在画完界面后调用getTicketsList接口,结果存在list里
+    fetch('https://zendesk-ticket-viewer-robin.herokuapp.com:443/zendesk/ticket/viewer/ticket/list', {
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json;charset=UTF-8'
+      },
+      mode:'cors',
+      cache:'default'
+    })
+    .then(res => res.json())
+    .then((res => {
+      this.setState({list: res || []})
+    })
+    )
   }
 
   handleChange = (value) => {
@@ -49,13 +67,17 @@ export default class App extends React.Component {
   }
 
   render () {
-    const {current, minValue, maxValue, isShow, showId} = this.state;
+    const {current, minValue, maxValue, isShow, showId} = this.state; // list从state括号里取出
 
     return (
       <section className='app'>
-        {(mockData.slice(minValue, maxValue) || []).map((d, index) => {
+        <header className='app-header'>
+          <div>Ticket Viewer</div>
+          <div>total tickets on the page</div>
+        </header>
+        {(mockData.slice(minValue, maxValue) || []).map((d, index) => {  // mockData换成list
           return (
-            <div className='app-block' key={index} onClick={() => this.handleClick(d.id)}>
+            <div className='app-block' title='click to review details' key={index} onClick={() => this.handleClick(d.id)}>
               <Card num={minValue + index + 1}>
                 {d.title}
               </Card>
